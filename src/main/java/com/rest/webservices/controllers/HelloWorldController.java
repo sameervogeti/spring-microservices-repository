@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("restful-services")
 public class HelloWorldController {
 
-    @GetMapping("/helloWorld")
-    public ResponseEntity<User> helloWorld() {
+    @GetMapping("/helloWorld/{userName}")
+    public ResponseEntity<User> helloWorld(@PathVariable String userName) {
         log.info("Inside Hello World");
-        User user = User.builder().userName("Sameer").build();
+        User user = User.builder().userName(userName).build();
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 }
