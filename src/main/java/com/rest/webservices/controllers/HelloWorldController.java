@@ -1,5 +1,6 @@
 package com.rest.webservices.controllers;
 
+import com.rest.webservices.exceptions.UserNotFoundException;
 import com.rest.webservices.model.User;
 import com.rest.webservices.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,10 @@ public class HelloWorldController {
     public ResponseEntity<User> helloWorld(@PathVariable String userId) {
         log.info("Inside getUser by userId");
         User user = userService.getUser(userId);
-        return new ResponseEntity<User>(user, HttpStatus.OK);
+        if (user == null) {
+            throw new UserNotFoundException("User Not Found");
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/getUsers")
