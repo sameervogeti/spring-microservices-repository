@@ -1,23 +1,43 @@
 package com.rest.webservices.controllers;
 
 import com.rest.webservices.model.User;
+import com.rest.webservices.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Slf4j
-@RequestMapping("restful-services")
+@RequiredArgsConstructor
+@RequestMapping("users")
 public class HelloWorldController {
+    @Autowired
+    UserService userService;
 
-    @GetMapping("/helloWorld/{userName}")
-    public ResponseEntity<User> helloWorld(@PathVariable String userName) {
-        log.info("Inside Hello World");
-        User user = User.builder().userName(userName).build();
+    @GetMapping("/getUser/{userId}")
+    public ResponseEntity<User> helloWorld(@PathVariable String userId) {
+        log.info("Inside getUser by userId");
+        User user = userService.getUser(userId);
         return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/getUsers")
+    public ResponseEntity<List<User>> helloWorld() {
+        log.info("Inside retrieve all Users");
+
+        return new ResponseEntity<List<User>>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<UUID> addUser(@RequestBody User userDetails) {
+        log.info("Inside Add User");
+
+        return new ResponseEntity<UUID>(userService.addUser(userDetails), HttpStatus.CREATED);
     }
 }
